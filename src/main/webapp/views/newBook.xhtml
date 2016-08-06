@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="layout.xhtml">
+
+    <ui:define name="topmenu">
+        <h:form styleClass="btn-toolbar pull-right" style="margin: 5px">
+            <div class="btn-group">
+                <h:commandButton action="#{languageBean.setLanguage('ru')}"
+                                 value="#{msgs.label_ru_RU}" styleClass="btn pull-right btn btn-primary btn-md"/>
+                <h:outputText value=" "/>
+            </div>
+            <div class="btn-group">
+                <h:commandButton action="#{languageBean.setLanguage('en')}"
+                                 value="#{msgs.label_en_US}" styleClass="btn pull-right btn btn-primary btn-md"/>
+            </div>
+        </h:form>
+        <div class="btn-toolbar pull-right" style="margin: 5px">
+            <div class="btn-group">
+                <h:link value="#{msgs.label_go_to_authors}" outcome="newAuthor.xhtml"
+                        class="btn pull-right btn btn-primary btn-md"/>
+            </div>
+            <div class="btn-group">
+                <!--<form class="form-inline" action="${logoutUrl}" method="post">
+                  <input type="submit" class="btn btn btn-primary btn-md" value="${labelLogOut}"/>
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>-->
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="title">#{msgs.label_book_list}</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="bookForm">
+
+            #{msgs.label_add_new_book}
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_title}" styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{bookController.book.title}" id="title" styleClass="form-control"/>
+                    <h:message for="title" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_price}" styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{bookController.book.price}" id="price" styleClass="form-control"/>
+                    <h:message for="price" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_description}" styleClass="col-md-3 control-label"/>
+                    <h:inputTextarea value="#{bookController.book.description}" id="description" cols="16" rows="3"
+                                     styleClass="form-control"/>
+                    <h:message for="description" styleClass="errorMesssage"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_nbofpage}" styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{bookController.book.nbOfPage}" id="nbofpage" styleClass="form-control"/>
+                    <h:message for="nbofpage" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_choose_author}" styleClass="col-md-3 control-label"/>
+                    <h:selectManyListbox value="#{bookController.book.authors}" converter="#{authorConverter}">
+                        <f:selectItems value="#{booksAuthorsEJB.findAllAuthors()}" var="var"
+                                       itemLabel="#{var.name}" itemValue="#{var}">
+                        </f:selectItems>
+                    </h:selectManyListbox>
+                </div>
+
+            </div>
+            <h:commandButton value="#{msgs.label_accept}" action="#{bookController.doCreateBook}">
+                <f:ajax execute="@form" render=":bookListForm:booklist :errors"/>
+            </h:commandButton>
+        </h:form>
+
+        <h:form id="bookListForm">
+            <h:dataTable id="booklist" value="#{booksAuthorsEJB.findBooks()}" var="bk" style="width: auto"
+                         class="table table-striped table-bordered">
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_book_title}"/>
+                    </f:facet>
+                    <h:link outcome="viewBook.xhtml?id=#{bk.id}" value="#{bk.title}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_book_price}"/>
+                    </f:facet>
+                    <h:outputText value="#{bk.price}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_book_authors}"/>
+                    </f:facet>
+                    <ui:repeat value="#{bk.authors.toArray()}" var="auhtor" varStatus="loop">
+                        <h:outputText value="#{auhtor.name}#{!loop.last ? ', ' : ''}"/>
+                    </ui:repeat>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_book_nbofpage}"/>
+                    </f:facet>
+                    <h:outputText value="#{bk.nbOfPage}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_book_description}"/>
+                    </f:facet>
+                    <h:outputText value="#{bk.description}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_remove}"/>
+                    </f:facet>
+                    <h:commandButton value="#{msgs.label_remove}" action="#{bookController.doDeleteBook(bk.id)}">
+                        <f:ajax execute="@form" render=":bookListForm"/>
+                        <span class="glyphicon glyphicon-trash"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

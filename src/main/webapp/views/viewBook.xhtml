@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="layout.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{bookController.book.id}"/>
+        <f:viewAction action="#{bookController.doFindBookById}"/>
+    </f:metadata>
+
+    <ui:define name="title">#{msgs.label_book}</ui:define>
+
+    <ui:define name="content">
+
+        <h:panelGrid columns="2">
+
+            <h:form>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h:outputLabel value="#{msgs.label_book_title}" styleClass="col-md-3 control-label"/>
+                        <h:inputText readonly="true" value="#{bookController.book.title}" id="title"
+                                     styleClass="form-control"/>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h:outputLabel value="#{msgs.label_book_price}" styleClass="col-md-3 control-label"/>
+                        <h:inputText readonly="true" value="#{bookController.book.price}" id="price"
+                                     styleClass="form-control"/>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h:outputLabel value="#{msgs.label_book_description}" styleClass="col-md-3 control-label"/>
+                        <h:inputText readonly="true" value="#{bookController.book.description}" id="description"
+                                     styleClass="form-control"/>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h:outputLabel value="#{msgs.label_book_nbofpage}" styleClass="col-md-3 control-label"/>
+                        <h:inputText readonly="true" value="#{bookController.book.nbOfPage}" id="nbOfPage"
+                                     styleClass="form-control"/>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h:outputLabel value="#{msgs.label_author_list}" styleClass="col-md-3 control-label"/>
+                        <h:selectManyListbox readonly="true" value="#{bookController.book.authors}">
+                            <f:selectItems value="#{bookController.book.authors}" var="var"
+                                           itemLabel="#{var.name}" itemValue="#{var}">
+                            </f:selectItems>
+                        </h:selectManyListbox>
+                    </div>
+                </div>
+            </h:form>
+        </h:panelGrid>
+        <h:link outcome="editBook.xhtml?id=#{bookController.book.id}" value="#{msgs.label_edit}"/>
+    </ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="layout.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{authorController.author.id}"/>
+        <f:viewAction action="#{authorController.doFindAuthorById}"/>
+    </f:metadata>
+
+    <ui:define name="topmenu">
+        <div class="btn-toolbar pull-right" style="margin: 5px">
+            <div class="btn-group">
+                <h:link value="#{msgs.label_go_to_authors}" outcome="newAuhtor.xhtml"
+                        class="btn pull-right btn btn-primary btn-md"/>
+            </div>
+            <div class="btn-group">
+                <!--<form class="form-inline" action="${logoutUrl}" method="post">
+                  <input type="submit" class="btn btn btn-primary btn-md" value="${labelLogOut}"/>
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>-->
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="title">#{msgs.label_edit}</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="authorForm">
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_author_name} : " styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{authorController.author.name}" id="name" styleClass="form-control"/>
+
+                    <h:message for="name" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+            <h:commandButton value="#{msgs.label_edit}" action="#{authorController.doEditAuthor()}">
+            </h:commandButton>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="layout.xhtml">
+
+    <ui:define name="topmenu">
+        <h:form styleClass="btn-toolbar pull-right" style="margin: 5px">
+            <div class="btn-group">
+                <h:commandButton action="#{languageBean.setLanguage('ru')}"
+                                 value="#{msgs.label_ru_RU}" styleClass="btn pull-right btn btn-primary btn-md"/>
+                <h:outputText value=" "/>
+            </div>
+            <div class="btn-group">
+                <h:commandButton action="#{languageBean.setLanguage('en')}"
+                                 value="#{msgs.label_en_US}" styleClass="btn pull-right btn btn-primary btn-md"/>
+
+            </div>
+        </h:form>
+        <div class="btn-toolbar pull-right" style="margin: 5px">
+            <div class="btn-group">
+                <!-- <a href="${pageContext.request.contextPath}/author"
+                    class="btn pull-right btn btn-primary btn-md">${goToAuthors}</a>-->
+            </div>
+            <div class="btn-group">
+                <!--<form class="form-inline" action="${logoutUrl}" method="post">
+                  <input type="submit" class="btn btn btn-primary btn-md" value="${labelLogOut}"/>
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>-->
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="title">#{msgs.label_author_list}</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="auhtorForm">
+
+            #{msgs.label_add_new_author}
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_author_name}" styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{authorController.author.name}" id="name" styleClass="form-control"/>
+                    <h:message for="title" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+            <h:commandButton value="#{msgs.label_accept}" action="#{authorController.doCreateAuthor}">
+                <f:ajax execute="@form" render=":authorListForm:authorList :errors"/>
+            </h:commandButton>
+        </h:form>
+
+        <h:form id="authorListForm">
+            <h:dataTable id="authorList" value="#{booksAuthorsEJB.findAllAuthors()}" var="author" style="width: auto"
+                         class="table table-striped table-bordered">
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_author_name}"/>
+                    </f:facet>
+                    <h:link outcome="viewAuthor.xhtml?id=#{author.id}" value="#{author.name}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msgs.label_remove}"/>
+                    </f:facet>
+                    <h:commandButton value="#{msgs.label_remove}"
+                                     action="#{authorController.doDeleteAuthor(author.id)}">
+                        <f:ajax execute="@form" render=":authorListForm"/>
+                        <span class="glyphicon glyphicon-trash"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

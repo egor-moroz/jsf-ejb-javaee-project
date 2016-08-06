@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="layout.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{bookController.book.id}"/>
+        <f:viewAction action="#{bookController.doFindBookById}"/>
+
+    </f:metadata>
+
+    <ui:define name="title">#{msgs.label_book_list}</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="bookForm">
+
+            #{msgs.label_add_new_book}
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_title} : " styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{bookController.book.title}" id="title" styleClass="form-control"/>
+
+                    <h:message for="title" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_price} : " styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{bookController.book.price}" id="price" styleClass="form-control"/>
+                    <h:message for="price" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_description} : " styleClass="col-md-3 control-label"/>
+                    <h:inputTextarea value="#{bookController.book.description}" id="description" cols="16" rows="3"
+                                     styleClass="form-control"/>
+                    <h:message for="description" styleClass="errorMesssage"/>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_book_nbofpage} : " styleClass="col-md-3 control-label"/>
+                    <h:inputText value="#{bookController.book.nbOfPage}" id="nbofpage" styleClass="form-control"
+                    />
+                    <h:message for="nbofpage" styleClass="errorMessage"/>
+                </div>
+            </div>
+
+            #{bookController.book.id}
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <h:outputLabel value="#{msgs.label_author_list} : " styleClass="col-md-3 control-label"/>
+
+                    <h:selectManyListbox value="#{bookController.book.authors}" converter="#{authorConverter}">
+                        <f:selectItems value="#{booksAuthorsEJB.findAllAuthors()}" var="var"
+                                       itemLabel="#{var.name}" itemValue="#{var}">
+
+                        </f:selectItems>
+
+                    </h:selectManyListbox>
+                </div>
+
+            </div>
+            <h:commandButton value="#{msgs.label_edit}" action="#{bookController.doEditBook()}">
+            </h:commandButton>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+</html>
