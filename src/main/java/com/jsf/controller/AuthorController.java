@@ -16,6 +16,7 @@ public class AuthorController {
 
     @Inject
     private BooksAuthorsEJB bookEJB;
+
     private Author author = new Author();
 
     public String doCreateAuthor() {

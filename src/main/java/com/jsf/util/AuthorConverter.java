@@ -20,7 +20,6 @@ public class AuthorConverter implements Converter   {
     @Inject
     private BooksAuthorsEJB bookEJB;
 
-
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
 
@@ -33,7 +32,6 @@ public class AuthorConverter implements Converter   {
             throw new ConverterException(facesMessage);
         }
     }
-
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {

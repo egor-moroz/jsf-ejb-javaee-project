@@ -27,11 +27,9 @@ public class BooksAuthorsEJB {
     return query.getResultList();
   }
 
-
   public Book findBookById(Long id) {
     return em.find(Book.class, id);
   }
-
 
   public Author findAuthorById(Long id) {
     return em.find(Author.class, id);

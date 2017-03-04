@@ -57,7 +57,6 @@ public class Author implements Serializable {
         this.books = books;
     }
 
-
     @Override
     public String toString() {
          return String.format("com.jsf.entity.Author[%d, %s]", id, name);
@@ -76,6 +75,5 @@ public class Author implements Serializable {
                 ? (Author.class.hashCode() + id.hashCode())
                 : super.hashCode();
     }
-
 
 }
